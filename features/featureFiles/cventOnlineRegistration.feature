@@ -11,3 +11,10 @@ Feature: Cvent Online Registration
         And enter the data in the registration form
         When the transaction is processed by Cvent and SnapLogic
         Then verify the content of the Json
+
+    @ems-251
+    Scenario: A user register someone else to attend an Event (2 attendees) (same company details)
+        Given a user navigates to Cvent to register some else for an event
+        And enter the data in the registration form with someone else
+        When the transaction is processed by Cvent and SnapLogic
+        Then verify the content of the Json

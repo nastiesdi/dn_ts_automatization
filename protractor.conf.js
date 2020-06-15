@@ -28,7 +28,7 @@ exports.config = {
         require: ['features/**/*.ts'], // loads step definitions
         format: 'pretty',               // enable console output
         compiler: 'ts:ts-node/register',   // interpret step definitions as TypeScript
-        tags: ['@smoke', '@ems-272'] //Execution tags, will be executed tests with ALL tags, i.e. BOTH @smoke and @publist tagged tests will run
+        tags: ['@smoke'] //Execution tags, will be executed tests with ALL tags, i.e. if you have ['@smoke', '@ems-248'] then BOTH @smoke and @ems-248 tagged test(s) will run
     },
 
     serenity: {
@@ -78,13 +78,13 @@ exports.config = {
         shardTestFiles: true,
         maxInstances: 2,
         chromeOptions: {
-            args: ["--window-size=1920,1080"]
+            //Standard mode
+            //args: ["--window-size=1920,1080"]
             //-----------------------------------------
             //Headless Mode
             //-----------------------------------------
-            //chromeOptions: {
-            //    args: ["--headless", "--disable-gpu", "--window-size=1920,1080"]
-        }
-        //-----------------------------------------
+            args: ["--headless", "--disable-gpu", "--window-size=1920,1080"]
+            //-----------------------------------------
+        }        
     }
 }

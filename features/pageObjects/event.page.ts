@@ -50,12 +50,55 @@ export class EventPage {
         await this.PersonalInformationLoaded();
     }
 
+    //Single Attendee
     public async RegisterSingleAttendee(indentifier: string): promise.Promise<void> {
         //This method used for a standard (common) single attendee registration using Cvent UI
         //TODO: Unite that with GDPRAttendee method
 
         //Safewaiter for main elements for Personal Information page
         await this.PersonalInformationLoaded();
+
+        //Fill in Personal Information Details
+        await this.FillInPersonalInformationDetails(indentifier);
+
+        //Clicking Next button
+        await browser.wait(ExpectedConditions.visibilityOf(this.eventElements.nextButton), defaultTimeout);
+        await browser.wait(ExpectedConditions.elementToBeClickable(this.eventElements.nextButton), defaultTimeout);
+        await this.eventElements.nextButton.click();
+
+        //Waiting for the next screen (Selected Payment)
+        await this.ProceedSelectedPayment();
+
+        //Waiting for the next screen (Registration Summary)   
+        await this.ProceedRegistrationSummary();
+
+        //Click on Radio Button to enable credit card fields  
+        await this.UseCreditCard();
+        await this.CreditCardFieldsLoaded();
+
+        //Enter credit card details
+        await this.FillInCreditCardDetails();
+
+        //Enter Billing Information
+        await this.FillInBillingInformation();
+
+        //Click Submit button and wait
+        await this.Submit();
+    }
+
+    //Register with someone else
+    public async RegisterWithSomeoneElse(indentifier: string): promise.Promise<void> {
+        //This method used for a standard (common) single attendee registration using Cvent UI
+        //TODO: Unite that with GDPRAttendee method
+
+        //Safewaiter for main elements for Personal Information page
+        await this.PersonalInformationLoaded();
+
+        //Click on Book with someone else
+        await this.personalInformationElements.BehalfPersonCheckbox.click();
+
+        //Fill in additional fields appeared
+        await this.FillInPersonalInformationAdditionalFields(indentifier);
 
         //Fill in Personal Information Details
         await this.FillInPersonalInformationDetails(indentifier);
@@ -134,6 +177,7 @@ export class EventPage {
         await this.Submit();
     }
 
+    //Tax registration
     public async taxRegistration(indentifier: string, eventCountry: string): promise.Promise<any> {
         //Setupping eventID and eventURL using browser.params global storage
         let eventID = await eval(`browser.params.${eventCountry}EventID`);
@@ -199,7 +243,7 @@ export class EventPage {
         await browser.wait(ExpectedConditions.invisibilityOf(this.eventElements.loadingMessage), defaultTimeout);
     }
 
-
+    //Personal information section without "Behalf" without checkbox ticked
     private async FillInPersonalInformationDetails(indentifier: string): promise.Promise<void> {
         //Filling in Personal Information defails data like firstName, lastName, e-mail, address, etc
         await this.personalInformationElements.SalutationDropdown.element(by.cssContainingText("option", "Prof")).click();
@@ -218,6 +262,14 @@ export class EventPage {
         //As last part picking Register Type because it triggers loading spinner
         await this.personalInformationElements.RegistrationTypeDropdown.element(by.cssContainingText("option", "General Delegate")).click();
         await this.WaitForLoadingSpinnerToDisappear();
+    }
+
+    //Personal information section appeared "Behalf" checkbox ticked
+    private async FillInPersonalInformationAdditionalFields(indentifier: string): promise.Promise<void> {
+
+        await this.personalInformationElements.PersonalFirstNameField.sendKeys(`personalFirstName${indentifier}`);
+        await this.personalInformationElements.PersonalLastNameField.sendKeys(`personalLastName${indentifier}`);
+        await this.personalInformationElements.PersonalemailAddressField.sendKeys(`personalEmailAddress${indentifier}@mailinator.com`);
     }
 
     private async ProceedSelectedPayment(): promise.Promise<void> {

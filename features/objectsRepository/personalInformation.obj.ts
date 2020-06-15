@@ -23,6 +23,11 @@ export class personalInformationRepository {
     readonly CityField = element(by.xpath("//span[contains(text(),'City')]/../../../../div/div/input"));
     readonly ZipCodeField = element(by.xpath("//span[contains(text(),'Post/Zip Code')]/../../../../div/div/input"));
 
+    //Register on behalf elements
+    readonly PersonalFirstNameField = element(by.xpath("//input[@name='firstName']"));
+    readonly PersonalLastNameField = element(by.xpath("//input[@name='lastName']"));
+    readonly PersonalemailAddressField = element(by.xpath("//input[@name='emailAddress']"));
+
     //Marketing Preferences (GDPR elements)
     readonly emailCheckbox = element(by.xpath("//span[contains(text(),'Email')]/../../../../div/*[@data-cvent-id='checkbox']/li/input"));
     readonly telephoneCheckbox = element(by.xpath("//span[contains(text(),'Telephone')]/../../../../div/*[@data-cvent-id='checkbox']/li/input"));
