@@ -30,7 +30,7 @@ export class EventPage {
         await browser.wait(ExpectedConditions.presenceOf(this.personalInformationElements.SalutationDropdown), defaultTimeout);
         await browser.wait(ExpectedConditions.presenceOf(this.personalInformationElements.AttendeeFirstNameField), defaultTimeout);
         await browser.wait(ExpectedConditions.presenceOf(this.personalInformationElements.AttendeeLastNameField), defaultTimeout);
-        await browser.wait(ExpectedConditions.presenceOf(this.personalInformationElements.AttendeeEmailAddressField), defaultTimeout);              
+        await browser.wait(ExpectedConditions.presenceOf(this.personalInformationElements.AttendeeEmailAddressField), defaultTimeout);
         await browser.wait(ExpectedConditions.presenceOf(this.personalInformationElements.CompanyField), defaultTimeout);
         await browser.wait(ExpectedConditions.presenceOf(this.personalInformationElements.JobTitleField), defaultTimeout);
         await browser.wait(ExpectedConditions.presenceOf(this.personalInformationElements.WorkPhoneField), defaultTimeout);
@@ -40,9 +40,8 @@ export class EventPage {
         await browser.wait(ExpectedConditions.presenceOf(this.personalInformationElements.CityField), defaultTimeout);
         await browser.wait(ExpectedConditions.presenceOf(this.personalInformationElements.ZipCodeField), defaultTimeout);
 
-        if (extraAttendee == false) 
-        {
-            await browser.wait(ExpectedConditions.presenceOf(this.personalInformationElements.BehalfPersonCheckbox), defaultTimeout);  
+        if (extraAttendee == false) {
+            await browser.wait(ExpectedConditions.presenceOf(this.personalInformationElements.BehalfPersonCheckbox), defaultTimeout);
             await browser.wait(ExpectedConditions.presenceOf(this.personalInformationElements.RegistrationTypeDropdown), defaultTimeout);
         }
     }
@@ -107,18 +106,18 @@ export class EventPage {
         await this.eventElements.nextButton.click();
 
         //Waiting for the next screen (Selected Payment)
-        await this.ProceedSelectedPayment();        
+        await this.ProceedSelectedPayment();
 
         //wait and click Extra Attendee
         await browser.wait(ExpectedConditions.presenceOf(this.eventElements.registrationSummaryExtraAttendeesButton), defaultTimeout);
         await browser.wait(ExpectedConditions.elementToBeClickable(this.eventElements.registrationSummaryExtraAttendeesButton), defaultTimeout);
         await this.eventElements.registrationSummaryExtraAttendeesButton.click();
-        await this.WaitForLoadingSpinnerToDisappear(500);        
+        await this.WaitForLoadingSpinnerToDisappear(500);
 
         //fill in extra attendee data
         await this.PersonalInformationLoaded(true);
         await this.FillInPersonalInformationDetails(`${indentifier}69`, true);
-        
+
         //Clicking Next button
         await browser.wait(ExpectedConditions.visibilityOf(this.eventElements.nextButton), defaultTimeout);
         await browser.wait(ExpectedConditions.elementToBeClickable(this.eventElements.nextButton), defaultTimeout);
@@ -161,7 +160,7 @@ export class EventPage {
         await this.eventElements.nextButton.click();
 
         //Waiting for the next screen (Selected Payment)
-        await this.ProceedSelectedPayment();        
+        await this.ProceedSelectedPayment();
 
         //First Extra Attendee
 
@@ -169,12 +168,12 @@ export class EventPage {
         await browser.wait(ExpectedConditions.presenceOf(this.eventElements.registrationSummaryExtraAttendeesButton), defaultTimeout);
         await browser.wait(ExpectedConditions.elementToBeClickable(this.eventElements.registrationSummaryExtraAttendeesButton), defaultTimeout);
         await this.eventElements.registrationSummaryExtraAttendeesButton.click();
-        await this.WaitForLoadingSpinnerToDisappear(100);        
+        await this.WaitForLoadingSpinnerToDisappear(100);
 
         //fill in extra attendee data
         await this.PersonalInformationLoaded(true);
         await this.FillInPersonalInformationDetails(`${indentifier}69`, true);
-        
+
         //Clicking Next button
         await browser.wait(ExpectedConditions.visibilityOf(this.eventElements.nextButton), defaultTimeout);
         await browser.wait(ExpectedConditions.elementToBeClickable(this.eventElements.nextButton), defaultTimeout);
@@ -189,12 +188,12 @@ export class EventPage {
         await browser.wait(ExpectedConditions.presenceOf(this.eventElements.registrationSummaryExtraAttendeesButton), defaultTimeout);
         await browser.wait(ExpectedConditions.elementToBeClickable(this.eventElements.registrationSummaryExtraAttendeesButton), defaultTimeout);
         await this.eventElements.registrationSummaryExtraAttendeesButton.click();
-        await this.WaitForLoadingSpinnerToDisappear(100);        
+        await this.WaitForLoadingSpinnerToDisappear(100);
 
         //fill in extra attendee data
         await this.PersonalInformationLoaded(true);
         await this.FillInPersonalInformationDetails(`${indentifier}70`, true);
-        
+
         //Clicking Next button
         await browser.wait(ExpectedConditions.visibilityOf(this.eventElements.nextButton), defaultTimeout);
         await browser.wait(ExpectedConditions.elementToBeClickable(this.eventElements.nextButton), defaultTimeout);
@@ -291,12 +290,12 @@ export class EventPage {
         await browser.wait(ExpectedConditions.presenceOf(this.eventElements.registrationSummaryExtraAttendeesButton), defaultTimeout);
         await browser.wait(ExpectedConditions.elementToBeClickable(this.eventElements.registrationSummaryExtraAttendeesButton), defaultTimeout);
         await this.eventElements.registrationSummaryExtraAttendeesButton.click();
-        await this.WaitForLoadingSpinnerToDisappear(500);        
+        //await this.WaitForLoadingSpinnerToDisappear(500);
 
         //fill in extra attendee data
         await this.PersonalInformationLoaded(true);
         await this.FillInPersonalInformationDetails(`${indentifier}69`, true);
-        
+
         //Clicking Next button
         await browser.wait(ExpectedConditions.visibilityOf(this.eventElements.nextButton), defaultTimeout);
         await browser.wait(ExpectedConditions.elementToBeClickable(this.eventElements.nextButton), defaultTimeout);
@@ -377,7 +376,7 @@ export class EventPage {
         let eventID = await eval(`browser.params.${eventCountry}EventID`);
         let eventURL = `https://web-sandbox.cvent.com/event/${eventID}/summary?rp=00000000-0000-0000-0000-000000000000`;
 
-        await browser.navigate().to(eventURL);        
+        await browser.navigate().to(eventURL);
         await this.Loaded();
         await browser.navigate().to(eventURL);
         await this.Loaded();
@@ -388,7 +387,7 @@ export class EventPage {
         return responseObject;
     }
 
-    public async processEvent(uniqueIndentifier: string, eventID: string):promise.Promise<any> {
+    public async processEvent(uniqueIndentifier: string, eventID: string): promise.Promise<any> {
         //This method is used to make GET and POST requests
 
         let getRequest = {
@@ -433,8 +432,10 @@ export class EventPage {
         //Useful method to avoid annoying Loading Spinners in Cvent UI
         //Neccesary sleep delay to properly catch this "brilliant" spinner, otherwise ExpectedConditions not always catch it and wait till its disappearing
         await browser.sleep(timeout);
-        await browser.wait(ExpectedConditions.presenceOf(this.eventElements.loadingMessage), defaultTimeout);
-        await browser.wait(ExpectedConditions.invisibilityOf(this.eventElements.loadingMessage), defaultTimeout);
+        if (this.eventElements.loadingMessage.isPresent) {
+            await browser.wait(ExpectedConditions.presenceOf(this.eventElements.loadingMessage), defaultTimeout);
+            await browser.wait(ExpectedConditions.invisibilityOf(this.eventElements.loadingMessage), defaultTimeout);
+        }
     }
 
     //Personal information section without "Behalf" without checkbox ticked
@@ -453,11 +454,10 @@ export class EventPage {
         await this.personalInformationElements.CityField.sendKeys("London");
         await this.personalInformationElements.ZipCodeField.sendKeys("EC4Y 8AX");
 
-        if (extraAttendee == false)
-        {
+        if (extraAttendee == false) {
             //As last part picking Register Type because it triggers loading spinner
-        await this.personalInformationElements.RegistrationTypeDropdown.element(by.cssContainingText("option", "General Delegate")).click();
-        await this.WaitForLoadingSpinnerToDisappear();
+            await this.personalInformationElements.RegistrationTypeDropdown.element(by.cssContainingText("option", "General Delegate")).click();
+            await this.WaitForLoadingSpinnerToDisappear();
         }
     }
 
@@ -525,7 +525,7 @@ export class EventPage {
         //Neccessary step of expectation due to some elements transformation
         await browser.wait(ExpectedConditions.presenceOf(this.paymentElements.stateProvinceDropdown), defaultTimeout);
 
-        await this.paymentElements.stateProvinceDropdown.element(by.cssContainingText("option", "London,City of")).click();            
+        await this.paymentElements.stateProvinceDropdown.element(by.cssContainingText("option", "London,City of")).click();
         await this.paymentElements.zipCodeField.sendKeys("EC4Y 8AX");
     }
 
