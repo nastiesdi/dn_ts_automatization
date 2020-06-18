@@ -105,7 +105,7 @@ export = function cventSteps() {
 
     //Behalf checkbox+Extra Attendee
     this.Then(/^register another delegate for the same event$/, async () => {
-        await event.RegisterWithSomeoneElse(uniqueIndentifier);
+        await event.RegisterWithSomeoneElseWithExtraAttendee(uniqueIndentifier);
     });
 
 
