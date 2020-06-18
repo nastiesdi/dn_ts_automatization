@@ -25,14 +25,12 @@ export class EventPage {
         await browser.wait(ExpectedConditions.presenceOf(this.eventElements.registerNowButton), defaultTimeout);
     }
 
-    public async PersonalInformationLoaded(): promise.Promise<void> {
+    public async PersonalInformationLoaded(extraAttendee: boolean = false): promise.Promise<void> {
         //Check for main Personal Information page elements to appear
         await browser.wait(ExpectedConditions.presenceOf(this.personalInformationElements.SalutationDropdown), defaultTimeout);
         await browser.wait(ExpectedConditions.presenceOf(this.personalInformationElements.AttendeeFirstNameField), defaultTimeout);
         await browser.wait(ExpectedConditions.presenceOf(this.personalInformationElements.AttendeeLastNameField), defaultTimeout);
-        await browser.wait(ExpectedConditions.presenceOf(this.personalInformationElements.AttendeeEmailAddressField), defaultTimeout);
-        await browser.wait(ExpectedConditions.presenceOf(this.personalInformationElements.BehalfPersonCheckbox), defaultTimeout);
-        await browser.wait(ExpectedConditions.presenceOf(this.personalInformationElements.RegistrationTypeDropdown), defaultTimeout);
+        await browser.wait(ExpectedConditions.presenceOf(this.personalInformationElements.AttendeeEmailAddressField), defaultTimeout);              
         await browser.wait(ExpectedConditions.presenceOf(this.personalInformationElements.CompanyField), defaultTimeout);
         await browser.wait(ExpectedConditions.presenceOf(this.personalInformationElements.JobTitleField), defaultTimeout);
         await browser.wait(ExpectedConditions.presenceOf(this.personalInformationElements.WorkPhoneField), defaultTimeout);
@@ -41,6 +39,12 @@ export class EventPage {
         await browser.wait(ExpectedConditions.presenceOf(this.personalInformationElements.StateProvinceField), defaultTimeout);
         await browser.wait(ExpectedConditions.presenceOf(this.personalInformationElements.CityField), defaultTimeout);
         await browser.wait(ExpectedConditions.presenceOf(this.personalInformationElements.ZipCodeField), defaultTimeout);
+
+        if (extraAttendee == false) 
+        {
+            await browser.wait(ExpectedConditions.presenceOf(this.personalInformationElements.BehalfPersonCheckbox), defaultTimeout);  
+            await browser.wait(ExpectedConditions.presenceOf(this.personalInformationElements.RegistrationTypeDropdown), defaultTimeout);
+        }
     }
 
     public async StartRegister(): promise.Promise<void> {
@@ -86,6 +90,136 @@ export class EventPage {
         await this.Submit();
     }
 
+    //Two Attendees
+    public async RegisterTwoAttendees(indentifier: string): promise.Promise<void> {
+        //This method used for a standard (common) single attendee registration using Cvent UI
+        //TODO: Unite that with GDPRAttendee method
+
+        //Safewaiter for main elements for Personal Information page
+        await this.PersonalInformationLoaded();
+
+        //Fill in Personal Information Details
+        await this.FillInPersonalInformationDetails(indentifier);
+
+        //Clicking Next button
+        await browser.wait(ExpectedConditions.visibilityOf(this.eventElements.nextButton), defaultTimeout);
+        await browser.wait(ExpectedConditions.elementToBeClickable(this.eventElements.nextButton), defaultTimeout);
+        await this.eventElements.nextButton.click();
+
+        //Waiting for the next screen (Selected Payment)
+        await this.ProceedSelectedPayment();        
+
+        //wait and click Extra Attendee
+        await browser.wait(ExpectedConditions.presenceOf(this.eventElements.registrationSummaryExtraAttendeesButton), defaultTimeout);
+        await browser.wait(ExpectedConditions.elementToBeClickable(this.eventElements.registrationSummaryExtraAttendeesButton), defaultTimeout);
+        await this.eventElements.registrationSummaryExtraAttendeesButton.click();
+        await this.WaitForLoadingSpinnerToDisappear(500);        
+
+        //fill in extra attendee data
+        await this.PersonalInformationLoaded(true);
+        await this.FillInPersonalInformationDetails(`${indentifier}69`, true);
+        
+        //Clicking Next button
+        await browser.wait(ExpectedConditions.visibilityOf(this.eventElements.nextButton), defaultTimeout);
+        await browser.wait(ExpectedConditions.elementToBeClickable(this.eventElements.nextButton), defaultTimeout);
+        await this.eventElements.nextButton.click();
+
+        //Waiting for the next screen (Selected Payment)
+        await this.ProceedSelectedPayment();
+
+        //Waiting for the next screen (Registration Summary)   
+        await this.ProceedRegistrationSummary();
+
+        //Click on Radio Button to enable credit card fields  
+        await this.UseCreditCard();
+        await this.CreditCardFieldsLoaded();
+
+        //Enter credit card details
+        await this.FillInCreditCardDetails();
+
+        //Enter Billing Information
+        await this.FillInBillingInformation();
+
+        //Click Submit button and wait
+        await this.Submit();
+    }
+
+    //Three Attendees
+    public async RegisterThreeAttendees(indentifier: string): promise.Promise<void> {
+        //This method used for a standard (common) single attendee registration using Cvent UI
+        //TODO: Unite that with GDPRAttendee method
+
+        //Safewaiter for main elements for Personal Information page
+        await this.PersonalInformationLoaded();
+
+        //Fill in Personal Information Details
+        await this.FillInPersonalInformationDetails(indentifier);
+
+        //Clicking Next button
+        await browser.wait(ExpectedConditions.visibilityOf(this.eventElements.nextButton), defaultTimeout);
+        await browser.wait(ExpectedConditions.elementToBeClickable(this.eventElements.nextButton), defaultTimeout);
+        await this.eventElements.nextButton.click();
+
+        //Waiting for the next screen (Selected Payment)
+        await this.ProceedSelectedPayment();        
+
+        //First Extra Attendee
+
+        //wait and click Extra Attendee
+        await browser.wait(ExpectedConditions.presenceOf(this.eventElements.registrationSummaryExtraAttendeesButton), defaultTimeout);
+        await browser.wait(ExpectedConditions.elementToBeClickable(this.eventElements.registrationSummaryExtraAttendeesButton), defaultTimeout);
+        await this.eventElements.registrationSummaryExtraAttendeesButton.click();
+        await this.WaitForLoadingSpinnerToDisappear(100);        
+
+        //fill in extra attendee data
+        await this.PersonalInformationLoaded(true);
+        await this.FillInPersonalInformationDetails(`${indentifier}69`, true);
+        
+        //Clicking Next button
+        await browser.wait(ExpectedConditions.visibilityOf(this.eventElements.nextButton), defaultTimeout);
+        await browser.wait(ExpectedConditions.elementToBeClickable(this.eventElements.nextButton), defaultTimeout);
+        await this.eventElements.nextButton.click();
+
+        //Waiting for the next screen (Selected Payment)
+        await this.ProceedSelectedPayment();
+
+        //Second Extra Attendee
+
+        //wait and click Extra Attendee
+        await browser.wait(ExpectedConditions.presenceOf(this.eventElements.registrationSummaryExtraAttendeesButton), defaultTimeout);
+        await browser.wait(ExpectedConditions.elementToBeClickable(this.eventElements.registrationSummaryExtraAttendeesButton), defaultTimeout);
+        await this.eventElements.registrationSummaryExtraAttendeesButton.click();
+        await this.WaitForLoadingSpinnerToDisappear(100);        
+
+        //fill in extra attendee data
+        await this.PersonalInformationLoaded(true);
+        await this.FillInPersonalInformationDetails(`${indentifier}70`, true);
+        
+        //Clicking Next button
+        await browser.wait(ExpectedConditions.visibilityOf(this.eventElements.nextButton), defaultTimeout);
+        await browser.wait(ExpectedConditions.elementToBeClickable(this.eventElements.nextButton), defaultTimeout);
+        await this.eventElements.nextButton.click();
+
+        //Waiting for the next screen (Selected Payment)
+        await this.ProceedSelectedPayment();
+
+        //Waiting for the next screen (Registration Summary)   
+        await this.ProceedRegistrationSummary();
+
+        //Click on Radio Button to enable credit card fields  
+        await this.UseCreditCard();
+        await this.CreditCardFieldsLoaded();
+
+        //Enter credit card details
+        await this.FillInCreditCardDetails();
+
+        //Enter Billing Information
+        await this.FillInBillingInformation();
+
+        //Click Submit button and wait
+        await this.Submit();
+    }
+
     //Register with someone else
     public async RegisterWithSomeoneElse(indentifier: string): promise.Promise<void> {
         //This method used for a standard (common) single attendee registration using Cvent UI
@@ -103,6 +237,66 @@ export class EventPage {
         //Fill in Personal Information Details
         await this.FillInPersonalInformationDetails(indentifier);
 
+        //Clicking Next button
+        await browser.wait(ExpectedConditions.visibilityOf(this.eventElements.nextButton), defaultTimeout);
+        await browser.wait(ExpectedConditions.elementToBeClickable(this.eventElements.nextButton), defaultTimeout);
+        await this.eventElements.nextButton.click();
+
+        //Waiting for the next screen (Selected Payment)
+        await this.ProceedSelectedPayment();
+
+        //Waiting for the next screen (Registration Summary)   
+        await this.ProceedRegistrationSummary();
+
+        //Click on Radio Button to enable credit card fields  
+        await this.UseCreditCard();
+        await this.CreditCardFieldsLoaded();
+
+        //Enter credit card details
+        await this.FillInCreditCardDetails();
+
+        //Enter Billing Information
+        await this.FillInBillingInformation();
+
+        //Click Submit button and wait
+        await this.Submit();
+    }
+
+    //Register with someone else+ExtraAttendee
+    public async RegisterWithSomeoneElseWithExtraAttendee(indentifier: string): promise.Promise<void> {
+        //This method used for a standard (common) single attendee registration using Cvent UI
+        //TODO: Unite that with GDPRAttendee method
+
+        //Safewaiter for main elements for Personal Information page
+        await this.PersonalInformationLoaded();
+
+        //Click on Book with someone else
+        await this.personalInformationElements.BehalfPersonCheckbox.click();
+
+        //Fill in additional fields appeared
+        await this.FillInPersonalInformationAdditionalFields(indentifier);
+
+        //Fill in Personal Information Details
+        await this.FillInPersonalInformationDetails(indentifier);
+
+        //Clicking Next button
+        await browser.wait(ExpectedConditions.visibilityOf(this.eventElements.nextButton), defaultTimeout);
+        await browser.wait(ExpectedConditions.elementToBeClickable(this.eventElements.nextButton), defaultTimeout);
+        await this.eventElements.nextButton.click();
+
+        //Waiting for the next screen (Selected Payment)
+        await this.ProceedSelectedPayment();
+
+        //wait and click Extra Attendee
+        await browser.wait(ExpectedConditions.presenceOf(this.eventElements.registrationSummaryExtraAttendeesButton), defaultTimeout);
+        await browser.wait(ExpectedConditions.elementToBeClickable(this.eventElements.registrationSummaryExtraAttendeesButton), defaultTimeout);
+        await this.eventElements.registrationSummaryExtraAttendeesButton.click();
+        await this.WaitForLoadingSpinnerToDisappear(500);        
+
+        //fill in extra attendee data
+        await this.PersonalInformationLoaded(true);
+        await this.FillInPersonalInformationDetails(`${indentifier}69`, true);
+        
         //Clicking Next button
         await browser.wait(ExpectedConditions.visibilityOf(this.eventElements.nextButton), defaultTimeout);
         await browser.wait(ExpectedConditions.elementToBeClickable(this.eventElements.nextButton), defaultTimeout);
@@ -235,16 +429,16 @@ export class EventPage {
         return responseObject;
     }
 
-    private async WaitForLoadingSpinnerToDisappear(): promise.Promise<void> {
+    private async WaitForLoadingSpinnerToDisappear(timeout: number = 1000): promise.Promise<void> {
         //Useful method to avoid annoying Loading Spinners in Cvent UI
         //Neccesary sleep delay to properly catch this "brilliant" spinner, otherwise ExpectedConditions not always catch it and wait till its disappearing
-        await browser.sleep(1000);
+        await browser.sleep(timeout);
         await browser.wait(ExpectedConditions.presenceOf(this.eventElements.loadingMessage), defaultTimeout);
         await browser.wait(ExpectedConditions.invisibilityOf(this.eventElements.loadingMessage), defaultTimeout);
     }
 
     //Personal information section without "Behalf" without checkbox ticked
-    private async FillInPersonalInformationDetails(indentifier: string): promise.Promise<void> {
+    private async FillInPersonalInformationDetails(indentifier: string, extraAttendee: boolean = false): promise.Promise<void> {
         //Filling in Personal Information defails data like firstName, lastName, e-mail, address, etc
         await this.personalInformationElements.SalutationDropdown.element(by.cssContainingText("option", "Prof")).click();
         await this.personalInformationElements.AttendeeFirstNameField.sendKeys(`firstName${indentifier}`);
@@ -259,9 +453,12 @@ export class EventPage {
         await this.personalInformationElements.CityField.sendKeys("London");
         await this.personalInformationElements.ZipCodeField.sendKeys("EC4Y 8AX");
 
-        //As last part picking Register Type because it triggers loading spinner
+        if (extraAttendee == false)
+        {
+            //As last part picking Register Type because it triggers loading spinner
         await this.personalInformationElements.RegistrationTypeDropdown.element(by.cssContainingText("option", "General Delegate")).click();
         await this.WaitForLoadingSpinnerToDisappear();
+        }
     }
 
     //Personal information section appeared "Behalf" checkbox ticked
@@ -274,13 +471,17 @@ export class EventPage {
 
     private async ProceedSelectedPayment(): promise.Promise<void> {
         //Proceed to the next page from Selected Payment page
+        await browser.sleep(500);
         await browser.wait(ExpectedConditions.presenceOf(this.eventElements.registrationItemsSelected), defaultTimeout);
+        await browser.wait(ExpectedConditions.elementToBeClickable(this.eventElements.registrationItemsSelected), defaultTimeout);
         await this.eventElements.nextButton.click();
     }
 
     private async ProceedRegistrationSummary(): promise.Promise<void> {
         //Proceed to the next page from Registration Summary page
+        await browser.sleep(500);
         await browser.wait(ExpectedConditions.presenceOf(this.eventElements.registrationSummaryExtraAttendeesButton), defaultTimeout);
+        await browser.wait(ExpectedConditions.elementToBeClickable(this.eventElements.registrationSummaryExtraAttendeesButton), defaultTimeout);
         await this.eventElements.nextButton.click();
     }
 
